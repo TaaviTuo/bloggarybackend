@@ -9,6 +9,8 @@ public class BlogPost {
     private User poster;
     private Date datePosted;
     private int likes;
+    private long id;
+    private static long numOfPosts;
 
     public BlogPost() {
 
@@ -17,6 +19,27 @@ public class BlogPost {
         this.poster = new User();
         setDatePosted();
         this.likes = 123;
+        this.id = numOfPosts;
+        numOfPosts++;
+    }
+
+    public BlogPost(String header, String content, User poster) {
+
+        setHeader(header);
+        setContent(content);
+        setPoster(poster);
+        setDatePosted();
+        this.likes = 1;
+        setId();
+        numOfPosts++;
+    }
+
+    public void setId() {
+        this.id = numOfPosts;
+    }
+
+    public long getId() {
+        return id;
     }
 
     public void setHeader(String header) {
