@@ -2,6 +2,8 @@ package fi.tamk.bloggarybackend;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.PostConstruct;
@@ -19,7 +21,8 @@ public class MyRestController {
     public void init() {
 
         BlogPost kari = blogPostHandler.saveEntity(new BlogPost());
-        BlogPost test = blogPostHandler.saveEntity(new BlogPost("Testiä", "Testitesti lul", new User().toString()));
+        BlogPost test = blogPostHandler.saveEntity(new BlogPost("Testiä",
+                "Testitesti lul", new User().toString()));
     }
 
     public MyRestController(){
@@ -39,18 +42,18 @@ public class MyRestController {
     }
 
     @RequestMapping(path = "/addpost", method = RequestMethod.POST) // Map ONLY POST Requests
-    public @ResponseBody String addNewThread (@RequestBody BlogPost post, @RequestHeader HttpHeaders headers) {
+    public ResponseEntity<BlogPost> update (@RequestBody BlogPost post, @RequestHeader HttpHeaders headers) {
         // @ResponseBody means the returned String is the response, not a view name
         // @RequestParam means it is a parameter from the GET or POST request
         if (checkHeaders(headers)){
             blogPostHandler.saveEntity(post);
-            return "Blog post Saved";
+            return new ResponseEntity<BlogPost>(post, HttpStatus.OK);
         }
-        return "Blog post not Saved";
+        return new ResponseEntity<BlogPost>(post, HttpStatus.BAD_REQUEST);
     }
 
     @RequestMapping(path = "/addcomment", method = RequestMethod.POST) // Map ONLY POST Requests
-    public @ResponseBody BlogPost addNewPost (@RequestBody String title, @RequestParam String content, @RequestHeader HttpHeaders headers) {
+    public @ResponseBody BlogPost addNewComment (@RequestBody String comment, @RequestParam String user, @RequestHeader HttpHeaders headers) {
         // Change String in RequestBody to Comment when they work
         // @ResponseBody means the returned String is the response, not a view name
         // @RequestParam means it is a parameter from the GET or POST request
@@ -59,9 +62,9 @@ public class MyRestController {
             //tmp.getListOfMessages().add(msg);
             //messageThreadRepository.save(tmp);
             //msgRepository.save(m);
-            return addNewPost(title, content, headers);
+            return addNewComment(comment, user, headers);
         }
-        return addNewPost(title, content, headers);
+        return addNewComment(comment, user, headers);
     }
 
     @RequestMapping(path = "/blogposts/{userId}", method = RequestMethod.GET)

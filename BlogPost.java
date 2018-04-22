@@ -8,7 +8,7 @@ import java.util.Date;
 @Table (name="blogpost")
 public class BlogPost {
 
-    private String header;
+    private String title;
     private String content;
     private String poster;
     private Date datePosted;
@@ -20,7 +20,7 @@ public class BlogPost {
 
     public BlogPost() {
 
-        this.header = "Everything sucks";
+        this.title = "Everything sucks";
         this.content = "Yadayada. Yadayada.";
         this.poster = new User().toString();
         setDatePosted();
@@ -29,9 +29,9 @@ public class BlogPost {
         numOfPosts++;
     }
 
-    public BlogPost(String header, String content, String poster) {
+    public BlogPost(String title, String content, String poster) {
 
-        setHeader(header);
+        setTitle(title);
         setContent(content);
         setPoster(poster);
         setDatePosted();
@@ -48,12 +48,12 @@ public class BlogPost {
         return id;
     }
 
-    public void setHeader(String header) {
-        this.header = header;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
-    public String getHeader() {
-        return header;
+    public String getTitle() {
+        return title;
     }
 
     public void setContent(String content) {
