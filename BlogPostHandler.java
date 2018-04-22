@@ -1,46 +1,48 @@
 package fi.tamk.bloggarybackend;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Optional;
 
 @Service
-public class BlogPostHandler implements BlogPostRepository {
+public class BlogPostHandler {
 
-    private List<BlogPost> blogPostList = new ArrayList<BlogPost>();
+    //private List<BlogPost> blogPostList = new ArrayList<BlogPost>();
+    @Autowired
+    private final MyRepository blogPostList;
 
-    @Override
+    BlogPostHandler(MyRepository blogPostList) {
+        this.blogPostList = blogPostList;
+    }
+
     public BlogPost saveEntity(BlogPost entity) {
 
-        blogPostList.add(entity);
+        blogPostList.save(entity);
         return entity;
     }
 
-    @Override
-    public void delete(Long o) {
+    public Optional<BlogPost> delete(Long o) {
 
-        for(BlogPost c : blogPostList) {
-            if(c.getId() == o) {
-                blogPostList.remove(c);
-            }
+        Optional<BlogPost> toDelete = blogPostList.findById(o);
+
+        if(toDelete != null) {
+
+            blogPostList.deleteById(o);
+            return toDelete;
+        } else {
+
+            return null;
         }
     }
 
-    @Override
     public Iterable findAll() {
 
-        return blogPostList;
+        return blogPostList.findAll();
     }
 
-    @Override
-    public BlogPost findOne(Long o) {
+    public Optional<BlogPost> findOne(Long o) {
 
-        for(BlogPost c : blogPostList) {
-            if(c.getId() == o) {
-                return c;
-            }
-        }
-        return null;
+        return blogPostList.findById(o);
     }
 }

@@ -1,9 +1,16 @@
 package fi.tamk.bloggarybackend;
 
+import javax.persistence.*;
+
+@Entity
+@Table(name="child")
 public class User {
 
     private String username;
     private String password;
+    @Id
+    @GeneratedValue
+    private Long id;
     private int totalLikes;
 
     public User() {
@@ -42,5 +49,19 @@ public class User {
 
     public int getTotalLikes() {
         return totalLikes;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    @Override
+    public String toString() {
+
+        return username;
     }
 }

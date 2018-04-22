@@ -5,14 +5,12 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.PostConstruct;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.Optional;
 
 @RestController
 public class MyRestController {
 
     private final String HTTP_HEADER_ID = "1";
-
 
     @Autowired
     BlogPostHandler blogPostHandler;
@@ -21,7 +19,7 @@ public class MyRestController {
     public void init() {
 
         BlogPost kari = blogPostHandler.saveEntity(new BlogPost());
-        BlogPost test = blogPostHandler.saveEntity(new BlogPost("Testiä", "Testitesti lul", new User()));
+        BlogPost test = blogPostHandler.saveEntity(new BlogPost("Testiä", "Testitesti lul", new User().toString()));
     }
 
     public MyRestController(){
@@ -52,7 +50,7 @@ public class MyRestController {
     }
 
     @RequestMapping(path = "/addcomment", method = RequestMethod.POST) // Map ONLY POST Requests
-    public @ResponseBody String addNewMessage (@RequestBody String comment, @RequestParam String id, @RequestHeader HttpHeaders headers) {
+    public @ResponseBody BlogPost addNewPost (@RequestBody String title, @RequestParam String content, @RequestHeader HttpHeaders headers) {
         // Change String in RequestBody to Comment when they work
         // @ResponseBody means the returned String is the response, not a view name
         // @RequestParam means it is a parameter from the GET or POST request
@@ -61,13 +59,15 @@ public class MyRestController {
             //tmp.getListOfMessages().add(msg);
             //messageThreadRepository.save(tmp);
             //msgRepository.save(m);
-           return "CommentSaved";
+            return addNewPost(title, content, headers);
         }
-        return "Comment not Saved";
+        return addNewPost(title, content, headers);
     }
 
     @RequestMapping(path = "/blogposts/{userId}", method = RequestMethod.GET)
-    public @ResponseBody BlogPost getPost(@PathVariable int userId, Long id) {
+    public @ResponseBody
+    Optional<BlogPost> getPost(@PathVariable int userId, Long id) {
+        id = Long.parseLong("" + userId);
         return blogPostHandler.findOne(id);
     }
 
@@ -79,7 +79,7 @@ public class MyRestController {
 
     //@GetMapping(path="/allusers")
     //public @ResponseBody Iterable<User> getAllUsers() {
-        // This returns a JSON or XML with the users
+    // This returns a JSON or XML with the users
     //    return userRepository.findAll();
     //}
 
@@ -87,6 +87,12 @@ public class MyRestController {
     //public @ResponseBody User getUser(@RequestParam(value="id", defaultValue="") Long id) {
     //    return userRepository.findOne(id);
     //}
+
+    @GetMapping(path = "/delete/{userId}")
+    public @ResponseBody Optional<BlogPost> deletePost(@PathVariable int userId, Long id) {
+        id = Long.parseLong("" + userId);
+        return blogPostHandler.delete(id);
+    }
 
     public boolean checkHeaders(HttpHeaders headers){
         if (headers.containsKey("app_id")){
