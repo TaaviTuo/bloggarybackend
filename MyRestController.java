@@ -42,14 +42,15 @@ public class MyRestController {
     }
 
     @RequestMapping(path = "/addpost", method = RequestMethod.POST) // Map ONLY POST Requests
-    public ResponseEntity<BlogPost> update (@RequestBody BlogPost post, @RequestHeader HttpHeaders headers) {
-        // @ResponseBody means the returned String is the response, not a view name
+    public ResponseEntity<BlogPost> update (@RequestParam String title, String content, String poster,
+                                            @RequestHeader HttpHeaders headers) {
         // @RequestParam means it is a parameter from the GET or POST request
-        if (checkHeaders(headers)){
-            blogPostHandler.saveEntity(post);
-            return new ResponseEntity<BlogPost>(post, HttpStatus.OK);
-        }
-        return new ResponseEntity<BlogPost>(post, HttpStatus.BAD_REQUEST);
+        BlogPost post = new BlogPost(title, content, poster);
+
+        blogPostHandler.saveEntity(post);
+
+        return new ResponseEntity<BlogPost>(post, HttpStatus.OK);
+
     }
 
     @RequestMapping(path = "/addcomment", method = RequestMethod.POST) // Map ONLY POST Requests
