@@ -92,11 +92,27 @@ public class MyRestController {
     //    return userRepository.findOne(id);
     //}
 
-    @GetMapping(path = "/delete/{userId}")
+    @DeleteMapping(path = "/delete/{userId}")
     public @ResponseBody Optional<BlogPost> deletePost(@PathVariable int userId, Long id) {
         id = Long.parseLong("" + userId);
         return blogPostHandler.delete(id);
     }
+
+    /*
+    @PutMapping("update/{userid}")
+    public ResponseEntity<BlogPost> updateArticle(@RequestBody Long id) {
+
+        Optional<BlogPost> post = blogPostHandler.findOne(id);
+
+        if (post != null) {
+
+            blogPostHandler.update(id);
+            return new ResponseEntity<BlogPost>(post, HttpStatus.OK);
+        } else {
+
+            return new ResponseEntity<BlogPost>(post, HttpStatus.OK);
+        }
+    }*/
 
     public boolean checkHeaders(HttpHeaders headers){
         if (headers.containsKey("app_id")){
