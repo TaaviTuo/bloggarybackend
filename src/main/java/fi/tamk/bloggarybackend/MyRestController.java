@@ -5,6 +5,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponents;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.annotation.PostConstruct;
 import java.util.Optional;
@@ -22,25 +24,27 @@ public class MyRestController {
 
         BlogPost kari = blogPostHandler.saveEntity(new BlogPost());
         BlogPost test = blogPostHandler.saveEntity(new BlogPost("Testiä",
-                "Testitesti lul", "Anonymous"));
+                "Testitesti lul", "Kari"));
     }
 
     public MyRestController(){
 
     }
 
-    @RequestMapping(path = "/addpost", method = RequestMethod.POST) // Map ONLY POST Requests
-    public ResponseEntity<BlogPost> update (@RequestParam String title, String content, String poster,
-                                            @RequestHeader HttpHeaders headers) {
-        // @RequestParam means it is a parameter from the GET or POST request
-        BlogPost post = new BlogPost(title, content, poster);
+    @CrossOrigin(origins = "http://localhost:3000")
+    @RequestMapping(path = "/addpost", method = RequestMethod.POST)
+    public ResponseEntity<BlogPost> addPost(@RequestBody BlogPost post, UriComponentsBuilder builder) {
 
         blogPostHandler.saveEntity(post);
 
-        return new ResponseEntity<BlogPost>(post, HttpStatus.OK);
-
+        UriComponents uriComponents =
+                builder.path("/{id}").buildAndExpand(post.getId());
+        HttpHeaders header = new HttpHeaders();
+        header.setLocation(uriComponents.toUri());
+        return new ResponseEntity<>(header, HttpStatus.CREATED);
     }
 
+    @CrossOrigin(origins = "http://localhost:3000")
     @RequestMapping(path = "/blogposts/{userId}", method = RequestMethod.GET)
     public @ResponseBody
     Optional<BlogPost> getPost(@PathVariable int userId, Long id) {
@@ -48,19 +52,21 @@ public class MyRestController {
         return blogPostHandler.findOne(id);
     }
 
+    @CrossOrigin(origins = "http://localhost:3000")
     @GetMapping(path="/blogposts")
     public @ResponseBody Iterable<BlogPost> getAllPosts() {
         // This returns a JSON or XML with the users
         return blogPostHandler.findAll();
     }
 
+    @CrossOrigin(origins = "http://localhost:3000")
     @DeleteMapping(path = "/delete/{userId}")
     public @ResponseBody Optional<BlogPost> deletePost(@PathVariable int userId, Long id) {
         id = Long.parseLong("" + userId);
         return blogPostHandler.delete(id);
     }
 
-
+    @CrossOrigin(origins = "http://localhost:3000")
     @PutMapping("/update/{id}")
     public @ResponseBody BlogPost update(@PathVariable String id,
                                          @RequestParam String title, String content, String poster){
