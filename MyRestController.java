@@ -81,17 +81,6 @@ public class MyRestController {
         return blogPostHandler.findAll();
     }
 
-    //@GetMapping(path="/allusers")
-    //public @ResponseBody Iterable<User> getAllUsers() {
-    // This returns a JSON or XML with the users
-    //    return userRepository.findAll();
-    //}
-
-    //@RequestMapping(path = "/user", method = RequestMethod.GET)
-    //public @ResponseBody User getUser(@RequestParam(value="id", defaultValue="") Long id) {
-    //    return userRepository.findOne(id);
-    //}
-
     @DeleteMapping(path = "/delete/{userId}")
     public @ResponseBody Optional<BlogPost> deletePost(@PathVariable int userId, Long id) {
         id = Long.parseLong("" + userId);
