@@ -21,7 +21,7 @@ public class BlogPost {
     public BlogPost() {
 
         this.title = "Everything sucks";
-        this.content = "Yadayada. Yadayada.";
+        this.content = "Yadayada.";
         this.poster = "Anonymous";
         setDatePosted();
         this.likes = 123;

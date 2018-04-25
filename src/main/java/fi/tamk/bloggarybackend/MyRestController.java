@@ -75,8 +75,8 @@ public class MyRestController {
         return blogPostHandler.delete(id);
     }
 
-    /*
-    @PutMapping("update/{userid}")
+
+    /*@PutMapping("update/{userid}")
     public ResponseEntity<BlogPost> updateArticle(@RequestBody Long id) {
         Optional<BlogPost> post = blogPostHandler.findOne(id);
         if (post != null) {
