@@ -12,7 +12,6 @@ public class BlogPost {
     private String content;
     private String poster;
     private Date datePosted;
-    private int likes;
     @Id
     @GeneratedValue
     private Long id;
@@ -24,7 +23,6 @@ public class BlogPost {
         this.content = "Yadayada.";
         this.poster = "Anonymous";
         setDatePosted();
-        this.likes = 123;
         this.id = numOfPosts;
         numOfPosts++;
     }
@@ -35,9 +33,17 @@ public class BlogPost {
         setContent(content);
         setPoster(poster);
         setDatePosted();
-        this.likes = 1;
         setId();
         numOfPosts++;
+    }
+
+    public BlogPost(String title, String content, String poster, Long id) {
+
+        setTitle(title);
+        setContent(content);
+        setPoster(poster);
+        setDatePosted();
+        this.id = id;
     }
 
     public void setId() {
@@ -78,13 +84,5 @@ public class BlogPost {
 
     public Date getDatePosted() {
         return datePosted;
-    }
-
-    public void setLikes(int likes) {
-        this.likes = likes;
-    }
-
-    public int getLikes() {
-        return likes;
     }
 }

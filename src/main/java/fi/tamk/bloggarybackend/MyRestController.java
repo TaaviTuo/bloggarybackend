@@ -41,21 +41,6 @@ public class MyRestController {
 
     }
 
-    @RequestMapping(path = "/addcomment", method = RequestMethod.POST) // Map ONLY POST Requests
-    public @ResponseBody BlogPost addNewComment (@RequestBody String comment, @RequestParam String user, @RequestHeader HttpHeaders headers) {
-        // Change String in RequestBody to Comment when they work
-        // @ResponseBody means the returned String is the response, not a view name
-        // @RequestParam means it is a parameter from the GET or POST request
-        if (checkHeaders(headers)){
-            //MessageThread tmp = messageThreadRepository.findOne(id);
-            //tmp.getListOfMessages().add(msg);
-            //messageThreadRepository.save(tmp);
-            //msgRepository.save(m);
-            return addNewComment(comment, user, headers);
-        }
-        return addNewComment(comment, user, headers);
-    }
-
     @RequestMapping(path = "/blogposts/{userId}", method = RequestMethod.GET)
     public @ResponseBody
     Optional<BlogPost> getPost(@PathVariable int userId, Long id) {
@@ -76,16 +61,14 @@ public class MyRestController {
     }
 
 
-    /*@PutMapping("update/{userid}")
-    public ResponseEntity<BlogPost> updateArticle(@RequestBody Long id) {
-        Optional<BlogPost> post = blogPostHandler.findOne(id);
-        if (post != null) {
-            blogPostHandler.update(id);
-            return new ResponseEntity<BlogPost>(post, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<BlogPost>(post, HttpStatus.OK);
-        }
-    }*/
+    @PutMapping("/update/{id}")
+    public @ResponseBody BlogPost update(@PathVariable String id,
+                                         @RequestParam String title, String content, String poster){
+        Long blogId = Long.parseLong(id);
+        BlogPost toUpdate = new BlogPost(title, content, poster, blogId);
+
+        return blogPostHandler.update(toUpdate);
+    }
 
     public boolean checkHeaders(HttpHeaders headers){
         if (headers.containsKey("app_id")){

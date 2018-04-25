@@ -46,18 +46,14 @@ public class BlogPostHandler {
         return blogPostList.findById(o);
     }
 
-    public Optional<BlogPost> update(Long o, String content) {
+    public BlogPost update(BlogPost toUpdate) {
 
-        Optional<BlogPost> toUpdate = blogPostList.findById(o);
+        BlogPost post = new BlogPost(toUpdate.getTitle(),
+                toUpdate.getContent(),
+                toUpdate.getPoster(),
+                toUpdate.getId());
 
-        if (toUpdate != null) {
-
-            //toUpdate.setContent(content);
-
-            return toUpdate;
-        } else {
-
-            return null;
-        }
+        blogPostList.save(post);
+        return post;
     }
 }
