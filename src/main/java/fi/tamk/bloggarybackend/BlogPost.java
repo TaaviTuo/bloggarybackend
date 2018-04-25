@@ -22,7 +22,7 @@ public class BlogPost {
 
         this.title = "Everything sucks";
         this.content = "Yadayada. Yadayada.";
-        this.poster = new User().toString();
+        this.poster = "Anonymous";
         setDatePosted();
         this.likes = 123;
         this.id = numOfPosts;

@@ -22,23 +22,11 @@ public class MyRestController {
 
         BlogPost kari = blogPostHandler.saveEntity(new BlogPost());
         BlogPost test = blogPostHandler.saveEntity(new BlogPost("Testiä",
-                "Testitesti lul", new User().toString()));
+                "Testitesti lul", "Anonymous"));
     }
 
     public MyRestController(){
 
-    }
-
-    //WORK IN PROGRESS
-    @RequestMapping(path = "/adduser", method = RequestMethod.POST) // Map ONLY POST Requests
-    public @ResponseBody String addNewUser (@RequestBody User user, @RequestHeader HttpHeaders headers) {
-        // @ResponseBody means the returned String is the response, not a view name
-        // @RequestParam means it is a parameter from the GET or POST request
-        if (checkHeaders(headers)){
-            //userRepository.save(user);
-            return "User Saved";
-        }
-        return "User not Saved";
     }
 
     @RequestMapping(path = "/addpost", method = RequestMethod.POST) // Map ONLY POST Requests
@@ -80,17 +68,6 @@ public class MyRestController {
         // This returns a JSON or XML with the users
         return blogPostHandler.findAll();
     }
-
-    //@GetMapping(path="/allusers")
-    //public @ResponseBody Iterable<User> getAllUsers() {
-    // This returns a JSON or XML with the users
-    //    return userRepository.findAll();
-    //}
-
-    //@RequestMapping(path = "/user", method = RequestMethod.GET)
-    //public @ResponseBody User getUser(@RequestParam(value="id", defaultValue="") Long id) {
-    //    return userRepository.findOne(id);
-    //}
 
     @DeleteMapping(path = "/delete/{userId}")
     public @ResponseBody Optional<BlogPost> deletePost(@PathVariable int userId, Long id) {
