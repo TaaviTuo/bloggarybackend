@@ -1,5 +1,7 @@
 package fi.tamk.bloggarybackend;
 
+import org.hibernate.annotations.Type;
+
 import javax.persistence.*;
 
 import java.util.Date;
@@ -9,6 +11,7 @@ import java.util.Date;
 public class BlogPost {
 
     private String title;
+    @Lob @Type(type="text")
     private String content;
     private String poster;
     private Date datePosted;

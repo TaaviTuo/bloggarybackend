@@ -68,12 +68,17 @@ public class MyRestController {
 
     @CrossOrigin(origins = "http://localhost:3000")
     @PutMapping("/update/{id}")
-    public @ResponseBody BlogPost update(@PathVariable String id,
-                                         @RequestParam String title, String content, String poster){
+    public ResponseEntity<BlogPost> update(@PathVariable String id,
+                                         @RequestBody BlogPost post, UriComponentsBuilder builder){
         Long blogId = Long.parseLong(id);
-        BlogPost toUpdate = new BlogPost(title, content, poster, blogId);
+        System.out.println(post.getId());
+        blogPostHandler.update(post);
 
-        return blogPostHandler.update(toUpdate);
+        UriComponents uriComponents =
+                builder.path("/{id}").buildAndExpand(post.getId());
+        HttpHeaders header = new HttpHeaders();
+        header.setLocation(uriComponents.toUri());
+        return new ResponseEntity<>(header, HttpStatus.CREATED);
     }
 
     public boolean checkHeaders(HttpHeaders headers){
